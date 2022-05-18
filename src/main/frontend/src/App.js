@@ -5,9 +5,13 @@ import axios from "axios";
 
 
 const UserProfile = () =>{
+
+    const [userProfiles, setUserProfiles] = useState([]);
+
     const fetchUserProfiles = () => {
       axios.get("http://localhost:8080/api/v1/user-profile").then(res =>{
         console.log(res);
+        setUserProfiles(res.data);
       });
     }
 
@@ -15,8 +19,15 @@ const UserProfile = () =>{
       fetchUserProfiles();
     }, []);
 
-    return <h1>Hello</h1>;
-}
+    return userProfiles.mao((userProfiles, index) => {
+
+        return (<div>
+          <h1>{userProfiles.username}</h1>
+          <p>{userProfiles.userProfileId}</p>
+        </div>
+        );
+      });
+};
 
 function App() {
   return (
