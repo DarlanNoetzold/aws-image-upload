@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import logo from './logo.svg';
+import React, {useState, useEffect, useCallback} from 'react';
 import './App.css';
 import axios from "axios";
+import {useDropzone} from 'react-dropzone'
+
 
 
 const UserProfile = () =>{
@@ -19,14 +20,35 @@ const UserProfile = () =>{
       fetchUserProfiles();
     }, []);
 
-    return userProfiles.mao((userProfiles, index) => {
+    return userProfiles.map((userProfiles, index) => {
 
-        return (<div>
+        return (
+        <div key={index}>
+          <Dropzone />
           <h1>{userProfiles.username}</h1>
           <p>{userProfiles.userProfileId}</p>
         </div>
         );
       });
+
+      function Dropzone() {
+        const onDrop = useCallback(acceptedFiles => {
+          const file = acceptedFiles[0];
+          console.log(file);
+        }, [])
+        const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+      
+        return (
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
+            {
+              isDragActive ?
+                <p>Drop the image here ...</p> :
+                <p>Drag 'n' drop some profile image, or click to select profile image</p>
+            }
+          </div>
+        )
+      }
 };
 
 function App() {
